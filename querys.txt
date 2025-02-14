@@ -1,0 +1,30 @@
+{
+  stopPlace(id: "NSR:StopPlace:49662") {
+    name
+    latitude
+    longitude
+    estimatedCalls(numberOfDepartures: 5) {
+      aimedArrivalTime
+      aimedDepartureTime
+      cancellation
+      expectedArrivalTime
+      expectedDepartureTime
+      date
+      destinationDisplay {
+        frontText
+      }
+      serviceJourney {
+        id
+        transportMode
+        line {
+          name
+          transportMode
+          publicCode
+          id
+        }
+      }
+      stopPositionInPattern
+    }
+  }
+}
+https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20stopPlace%28id%3A%20%22NSR%3AStopPlace%3A49662%22%29%20%7B%0A%20%20%20%20name%0A%20%20%20%20latitude%0A%20%20%20%20longitude%0A%20%20%20%20estimatedCalls%28numberOfDepartures%3A%205%29%20%7B%0A%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20aimedDepartureTime%0A%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20expectedDepartureTime%0A%20%20%20%20%20%20date%0A%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20serviceJourney%20%7B%0A%20%20%20%20%20%20%20%20id%0A%20%20%20%20%20%20%20%20transportMode%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20transportMode%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%20%20id%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20stopPositionInPattern%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A
