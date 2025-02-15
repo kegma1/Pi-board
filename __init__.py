@@ -7,23 +7,24 @@ import os
 import threading
 from time import sleep
 from flask import Flask
-from lib.board import DepartureBoard
+from libs.board import DepartureBoard
+from libs.colors import WHITE
 ## 800 x 480 
 
 app = Flask(__name__)
 
 import routes.index
 
-img = Image.new("RGB", (800, 480), (255, 255, 255))
+img = Image.new("RGB", (800, 480), WHITE)
 
 boards = [DepartureBoard(img, "NSR:StopPlace:49662")]
 selected_board = 0
 
 def main():
-    while True:
-        boards[selected_board].draw_board()
-        img.show()
-        sleep(60)
+    # while True:
+    boards[selected_board].draw_board()
+    img.show()
+    sleep(60)
 
 def run_server():
     app.run(port=3000, debug=True, use_reloader=False, threaded=True)
