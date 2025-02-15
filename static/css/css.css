@@ -1,0 +1,25 @@
+@font-face {
+    font-family: Kodchasan;
+    src: url('/static/font/Kodchasan-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Kodchasan;
+    src: url('/static/font/Kodchasan-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: Kodchasan;
+    src: url('/static/font/Kodchasan-ExtraLightItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+
+h1 {
+    font-family: Kodchasan;
+}

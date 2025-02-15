@@ -1,39 +1,36 @@
-# set up logging
-import os, logging.config
-logging.config.fileConfig(os.path.join(os.path.dirname(__file__), 'config', 'logging.conf'))
-
 # suppress warning from inky library https://github.com/pimoroni/inky/issues/205
-import warnings
-warnings.filterwarnings("ignore", message=".*Busy Wait: Held high.*")
+# import warnings
+# warnings.filterwarnings("ignore", message=".*Busy Wait: Held high.*")
 
 from PIL import Image, ImageDraw, ImageFont
 import os
-import logging
 import threading
 from time import sleep
 from flask import Flask
+from lib.board import DepartureBoard
 ## 800 x 480 
-logger = logging.getLogger(__name__)
-logger.info("Starting web server")
 
 app = Flask(__name__)
 
 import routes.index
 
+img = Image.new("RGB", (800, 480), (255, 255, 255))
+
+boards = [DepartureBoard(img, "NSR:StopPlace:49662")]
+selected_board = 0
 
 def main():
     while True:
-        img = Image.new("RGBA", (800, 480), (255, 255, 255, 255))
-        d = ImageDraw.Draw(img)
-
-        d.text((10, 10), "Hello", fill=(255, 255, 255, 128))
-
+        boards[selected_board].draw_board()
         img.show()
-        sleep(80)
+        sleep(60)
+
+def run_server():
+    app.run(port=3000, debug=True, use_reloader=False, threaded=True)
 
 if __name__ == "__main__":
-    from werkzeug.serving import is_running_from_reloader
-
-    app.run()
-
+    web_server_thread = threading.Thread(target=run_server, daemon=True)
+    web_server_thread.start()
+    
+    main()
         
