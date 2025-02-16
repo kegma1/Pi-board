@@ -23,7 +23,7 @@ boards = [DepartureBoard(img, "NSR:StopPlace:49662"), # Rådhuset   - buss
           DepartureBoard(img, "NSR:StopPlace:58382"), # akerbrygge - trikk og ferge
           DepartureBoard(img, "NSR:StopPlace:58404"), # Nationaltheatret - trikk, ferge, metro og buss
           ]
-selected_board = 4
+selected_board = 0
 
 def main():
     # while True:

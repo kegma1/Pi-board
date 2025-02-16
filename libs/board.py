@@ -1,6 +1,6 @@
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
-from PIL import ImageDraw, ImageFont
+from PIL import ImageDraw, ImageFont, Image
 from datetime import datetime, timezone, timedelta
 from .colors import *
 from .icons import mode_to_icon
@@ -20,6 +20,7 @@ fnt = ImageFont.truetype("./static/font/Kodchasan-Regular.ttf", 20)
 # fly = grønn
 # trikk og gondol og Kabelbane = oranjs
 
+wallpaper = Image.open("./static/wallpaper/pi_board_wallpaper.png")
 
 transport = AIOHTTPTransport(url="https://api.entur.io/journey-planner/v3/graphql")
 
@@ -30,9 +31,11 @@ class Board:
         self.img = img
         self.d = ImageDraw.Draw(self.img)
         self.top_bar_height = 75
+        
 
     def draw_board(self):
-        self.d.rectangle((0, 0,self.img.width, self.img.height), WHITE)
+        # self.d.rectangle((0, 0,self.img.width, self.img.height), WHITE)
+        self.img.paste(wallpaper)
 
         # draws overlay
         self.d.rectangle((0, 0, 800, self.top_bar_height), BLACK)
