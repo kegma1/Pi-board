@@ -3,6 +3,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 from PIL import ImageDraw, ImageFont
 from datetime import datetime, timezone, timedelta
 from .colors import *
+from .icons import mode_to_icon
 import humanize
 
 _t = humanize.i18n.activate("nb")
@@ -97,8 +98,16 @@ class DepartureBoard(Board):
         self.d.text((left_padding, self.top_bar_height + 5), "På vei til", fill=BLACK, font=small_header_fnt)
         self.d.text((800 - left_padding, self.top_bar_height + 5), "Avgang", fill=BLACK, font=small_header_fnt, anchor="ra")
 
-        self.d.text((left_padding, 10), data["stopPlace"]["name"], fill=WHITE, font=header_fnt)
+        transport_modes = data["stopPlace"]["transportMode"]
+        large_icon_size = 80
+        if len(transport_modes) <= 2:
+            for i, mode in enumerate(transport_modes):
+                icon = mode_to_icon(mode, True)
+                self.img.paste(icon, (left_padding + (large_icon_size*i), 0), icon)
 
+        icon_padding = 80 if len(transport_modes) == 1 else 160
+
+        self.d.text((left_padding*2 + icon_padding, 15), data["stopPlace"]["name"], fill=WHITE, font=header_fnt)
 
         self.d.line((0, self.top_bar_height + header_height, 800, self.top_bar_height + header_height), BLACK, 3)
 
