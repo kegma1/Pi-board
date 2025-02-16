@@ -17,8 +17,12 @@ import routes.index
 
 img = Image.new("RGB", (800, 480), WHITE)
 
-boards = [DepartureBoard(img, "NSR:StopPlace:49662")]
-selected_board = 0
+boards = [DepartureBoard(img, "NSR:StopPlace:49662"), # Rådhuset   - buss
+          DepartureBoard(img, "NSR:StopPlace:6488"),  # Grønnland  - metro
+          DepartureBoard(img, "NSR:StopPlace:48048"), # skarberget - ferge
+          DepartureBoard(img, "NSR:StopPlace:58382"), # akerbrygge - trikk og ferge
+          ]
+selected_board = 2
 
 def main():
     # while True:
