@@ -13,11 +13,11 @@ small_header_fnt = ImageFont.truetype("./static/font/Kodchasan-Bold.ttf", 20)
 fnt = ImageFont.truetype("./static/font/Kodchasan-Regular.ttf", 20)
 
 
-# ferge = blå
+# ferge og tog = blå
 # metro = rød
 # buss = sort
 # trikk = grønn
-# tåg = oranjs
+# fly og gondol og Kabelbane = oranjs
 
 
 transport = AIOHTTPTransport(url="https://api.entur.io/journey-planner/v3/graphql")
