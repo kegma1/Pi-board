@@ -15,9 +15,9 @@ fnt = ImageFont.truetype("./static/font/Kodchasan-Regular.ttf", 20)
 
 # ferge og tog = blå
 # metro = rød
-# buss = sort
-# trikk = grønn
-# fly og gondol og Kabelbane = oranjs
+# buss og annet = sort
+# fly = grønn
+# trikk og gondol og Kabelbane = oranjs
 
 
 transport = AIOHTTPTransport(url="https://api.entur.io/journey-planner/v3/graphql")
