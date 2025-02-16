@@ -80,10 +80,12 @@ class DepartureBoard(Board):
         time_now = datetime.now(timezone.utc)
         time_delta = departure_time - time_now
 
-        humanized_time = humanize.naturaldelta(time_delta)
-        # if len(humanized_time) > 7:
-        #     humanized_time = humanized_time[0:6]
+        humanized_time = ""
 
+        if time_delta < timedelta(hours=1, minutes=30):
+            humanized_time = humanize.naturaldelta(time_delta)
+        else:
+            humanized_time = departure_time.strftime("%H:%M")
 
         return humanized_time
 
@@ -127,14 +129,14 @@ class DepartureBoard(Board):
             departure_time = self.time_to_departure(call)
 
             # line
-            self.d.rounded_rectangle((x0, y0, x1, y1), 15, BLACK)            
-            self.d.text(((x0 + x1)/2, (y0 + y1)/2), line_number, WHITE, header_fnt, anchor="mm")
+            line_num_bg_color, line_num_text_color = mode_to_color(call["serviceJourney"]["line"]["transportMode"])
+
+            self.d.rounded_rectangle((x0, y0, x1, y1), 15, line_num_bg_color)            
+            self.d.text(((x0 + x1)/2, (y0 + y1)/2), line_number, line_num_text_color, header_fnt, anchor="mm")
             
             # front text 
             # maks 350
             name_len = self.d.textlength(front_text, header_fnt)
-            print(name_len)
-
             if name_len > 350:
                 #15
                 front_text = front_text[:13] + "..."
