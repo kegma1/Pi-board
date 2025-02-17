@@ -25,17 +25,20 @@ wallpaper = Image.open("./static/wallpaper/pi_board_wallpaper.png")
 transport = AIOHTTPTransport(url="https://api.entur.io/journey-planner/v3/graphql")
 
 class Board:
-    def __init__(self, query, img):
+    def __init__(self, query, img, wallpaper_on = False):
         self.client = Client(transport=transport, fetch_schema_from_transport=True)
         self.query = gql(query)
         self.img = img
         self.d = ImageDraw.Draw(self.img)
         self.top_bar_height = 75
+        self.wallpaper_on = wallpaper_on
         
 
     def draw_board(self):
-        # self.d.rectangle((0, 0,self.img.width, self.img.height), WHITE)
-        self.img.paste(wallpaper)
+        if self.wallpaper_on:
+            self.img.paste(wallpaper)
+        else:
+            self.d.rectangle((0, 0,self.img.width, self.img.height), WHITE)
 
         # draws overlay
         self.d.rectangle((0, 0, 800, self.top_bar_height), BLACK)
@@ -50,7 +53,7 @@ class Board:
         pass
 
 class DepartureBoard(Board):
-    def __init__(self, img, stop_id):
+    def __init__(self, img, stop_id, wallpaper_on = False):
         super().__init__(
             """
             {
@@ -77,7 +80,8 @@ class DepartureBoard(Board):
                 }
             }
             """ % stop_id, 
-            img)
+            img,
+            wallpaper_on)
     
     def time_to_departure(self, call):
         departure_time = datetime.fromisoformat(call["expectedDepartureTime"])
@@ -97,6 +101,8 @@ class DepartureBoard(Board):
     def _draw_board(self, data):
         left_padding = 20
         header_height = 35
+
+        self.d.rectangle((0, self.top_bar_height, 800, self.top_bar_height + header_height), WHITE)
 
         self.d.text((left_padding, self.top_bar_height + 5), "På vei til", fill=BLACK, font=small_header_fnt)
         self.d.text((800 - left_padding, self.top_bar_height + 5), "Avgang", fill=BLACK, font=small_header_fnt, anchor="ra")
