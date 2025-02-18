@@ -18,12 +18,16 @@ import routes.index
 img = Image.new("RGB", (800, 480), WHITE)
 
 boards = [DepartureBoard(img, "NSR:StopPlace:49662", True), # Rådhuset   - buss
-          DepartureBoard(img, "NSR:StopPlace:6488"),  # Grønnland  - metro
+          DepartureBoard(img, "NSR:StopPlace:6488"),  # Grønland  - metro
           DepartureBoard(img, "NSR:StopPlace:48048"), # skarberget - ferge
           DepartureBoard(img, "NSR:StopPlace:58382"), # akerbrygge - trikk og ferge
           DepartureBoard(img, "NSR:StopPlace:58404", True), # Nationaltheatret - trikk, ferge, metro og buss
+          DepartureBoard(img, "NSR:StopPlace:59281"), # Harstad/Narvik lufthavn, Evenes - buss og fly
+          DepartureBoard(img, "NSR:StopPlace:58211"), # Oslo lufthavn - buss, fly og tåg
+          DepartureBoard(img, "NSR:StopPlace:62558", True), # Narvikfjellet - ingen buss 😢
+          DepartureBoard(img, "NSR:StopPlace:58066", True), # Fløibanen - gondol
           ]
-selected_board = 3
+selected_board = 4
 
 
 def main():
