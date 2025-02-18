@@ -112,7 +112,7 @@ class DepartureBoard(Board):
         if len(transport_modes) <= 2:
             for i, mode in enumerate(transport_modes):
                 icon = mode_to_icon(mode, True)
-                self.img.paste(icon, (left_padding + (large_icon_size*i), 0), icon)
+                self.img.paste(icon, (left_padding + (large_icon_size*i), -2), icon)
 
         icon_padding = 80 if len(transport_modes) == 1 else 160
 
@@ -159,11 +159,11 @@ class DepartureBoard(Board):
                 #15
                 front_text = front_text[:13] + "..."
 
-            self.d.text((x1 + left_padding, (y0 + y1)/2), front_text, BLACK, large_fnt, anchor="lm")
+            self.d.text((x1 + left_padding, (y0 + y1)/2), front_text, BLACK, large_fnt, anchor="lm", stroke_width=5, stroke_fill=WHITE)
 
             # departure time
             # self.d.rounded_rectangle((x0, y0, x1, y1), 15, BLACK) 
-            self.d.text((800 - left_padding, (y0 + y1)/2), departure_time, BLACK, header_fnt, anchor="rm")
+            self.d.text((800 - left_padding, (y0 + y1)/2), departure_time, BLACK, header_fnt, anchor="rm", stroke_width=5, stroke_fill=WHITE)
 
             y0 += header_height + row_padding
             y1 = y0 + row_height
