@@ -7,6 +7,15 @@ YELLOW = (255, 255, 68)     # #ffff44
 ORANGE = (239, 121, 44)     # #ef792c
 CLEAN = (255, 255, 255)     # #ffffff
 
+# BLACK = (0, 0, 0)           # #000000
+# WHITE = (255, 255, 255)     # #d9f2ff
+# GREEN = (0, 255, 0)        # #037c4c
+# BLUE = (0, 0, 255)        # #1b2ec6
+# RED = (255, 0, 0)         # #f55022
+# YELLOW = (255, 255, 0)     # #ffff44
+# ORANGE = (255, 140, 0)     # #ef792c
+# CLEAN = (255, 255, 255)     # #ffffff
+
 
 # ferge og tog = blå
 # metro = rød

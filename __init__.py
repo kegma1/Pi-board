@@ -9,6 +9,8 @@ from time import sleep
 from flask import Flask
 from libs.board import DepartureBoard
 from libs.colors import WHITE
+from inky.mock import InkyMockImpression
+from datetime import datetime, timezone
 ## 800 x 480 
 
 app = Flask(__name__)
@@ -16,6 +18,8 @@ app = Flask(__name__)
 import routes.index
 
 img = Image.new("RGB", (800, 480), WHITE)
+
+display = InkyMockImpression((800, 480))
 
 boards = [DepartureBoard(img, "NSR:StopPlace:49662", True), # Rådhuset   - buss
           DepartureBoard(img, "NSR:StopPlace:6488"),  # Grønland  - metro
@@ -27,14 +31,18 @@ boards = [DepartureBoard(img, "NSR:StopPlace:49662", True), # Rådhuset   - buss
           DepartureBoard(img, "NSR:StopPlace:62558", True), # Narvikfjellet - ingen buss 😢
           DepartureBoard(img, "NSR:StopPlace:58066", True), # Fløibanen - gondol
           ]
-selected_board = 4
+selected_board = 0
 
 
 def main():
-    # while True:
-    boards[selected_board].draw_board()
-    img.show()
-    sleep(60)
+
+    while True:
+        boards[selected_board].draw_board()
+        display.set_image(img)
+        display.show()
+
+        seconds_to_min = 60 - datetime.now(timezone.utc).second
+        sleep(seconds_to_min)
 
 def run_server():
     app.run(port=3000, debug=True, use_reloader=False, threaded=True)
