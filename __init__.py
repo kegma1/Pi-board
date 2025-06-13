@@ -57,8 +57,7 @@ def take_screenshot_as_pillow_image(route, width, height):
                 "deviceScaleFactor": 1,
             },
         )
-
-        driver.save_screenshot("screenshot.png")
+        
         image_data = driver.get_screenshot_as_png()
         image = Image.open(BytesIO(image_data))
         return image
