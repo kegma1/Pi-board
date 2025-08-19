@@ -1,4 +1,21 @@
 {% extends "base.html" %}
+{% block style%}
+    <style>
+        #app-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+    </style>
+{% endblock %}
 {% block body %}
-    <h1>Hallo, Verden!</h1>
+    <div id="app-container">
+        <h1>Hello, Pi-board!</h1>
+        <p>This fits exactly 800×480 pixels.</p>
+    </div>
 {% endblock %}

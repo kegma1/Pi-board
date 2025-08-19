@@ -8,15 +8,14 @@ import threading
 import time
 from flask import Flask, url_for
 import requests
-from libs.colors import WHITE
 import sys
+import json
 
 from Apps.TestApp.TestApp import TestApp
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from PIL import Image
 from io import BytesIO
 
@@ -31,7 +30,6 @@ width, height = 800, 480
 import routes.index
 import routes.get_image
 
-# img = Image.new("RGB", (800, 480), WHITE)
 
 display = None
 
@@ -77,6 +75,10 @@ def wait_for_server(url, timeout=30):
         time.sleep(0.5)
     raise RuntimeError("Flask server did not start in time.")
 
+def load_plugins():
+    with open("AppList.json", "r") as appList:
+        pass
+
 def main():
 
     while True:
@@ -91,6 +93,10 @@ def run_server():
     app.run(port=3000, debug=True, use_reloader=False, threaded=True)
 
 if __name__ == "__main__":
+    if len(sys.argv) <= 1:
+        print("ERROR: No arguments given")
+        sys.exit(1)
+
     if sys.argv[1] == "--dev":
         from inky.mock import InkyMockImpression
         display = InkyMockImpression((width, height))
