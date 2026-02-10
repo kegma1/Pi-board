@@ -2,17 +2,20 @@
 # import warnings
 # warnings.filterwarnings("ignore", message=".*Busy Wait: Held high.*")
 
-from PIL import Image, ImageDraw, ImageFont
-import os
+from PIL import Image
 import threading
 from time import sleep
 from flask import Flask
-from libs.board import DepartureBoard
+from boards.departureBoard import DepartureBoard
+from boards.qrBoard import QRBoard
 from libs.colors import WHITE
 from inky.mock import InkyMockImpression
-from datetime import datetime, timezone
 import sys
+import socket
 ## 800 x 480 
+
+DEBUG = False
+PORT = 6969
 
 app = Flask(__name__)
 
@@ -22,36 +25,42 @@ img = Image.new("RGB", (800, 480), WHITE)
 
 display = None
 
-boards = [DepartureBoard(img, "NSR:StopPlace:49662", True), # Rådhuset   - buss
+stop = None
+
+boards = [DepartureBoard(img, "NSR:StopPlace:49662"), # Rådhuset   - buss
           DepartureBoard(img, "NSR:StopPlace:6488"),  # Grønland  - metro
           DepartureBoard(img, "NSR:StopPlace:48048"), # skarberget - ferge
           DepartureBoard(img, "NSR:StopPlace:58382"), # akerbrygge - trikk og ferge
-          DepartureBoard(img, "NSR:StopPlace:58404", True), # Nationaltheatret - trikk, ferge, metro og buss
+          DepartureBoard(img, "NSR:StopPlace:58404"), # Nationaltheatret - trikk, ferge, metro og buss
           DepartureBoard(img, "NSR:StopPlace:59281"), # Harstad/Narvik lufthavn, Evenes - buss og fly
           DepartureBoard(img, "NSR:StopPlace:58211"), # Oslo lufthavn - buss, fly og tåg
-          DepartureBoard(img, "NSR:StopPlace:62558", True), # Narvikfjellet - ingen buss 😢
-          DepartureBoard(img, "NSR:StopPlace:58066", True), # Fløibanen - gondol
+          DepartureBoard(img, "NSR:StopPlace:62558"), # Narvikfjellet - ingen buss 😢
+          DepartureBoard(img, "NSR:StopPlace:58066"), # Fløibanen - gondol
           ]
 selected_board = 0
 
 
 def main():
+    if stop is None:
+        hostname = socket.gethostname()
+        ip_addr = socket.gethostbyname(hostname)
+
+        board = QRBoard(img, ip_addr, hostname, PORT)
+        board.draw_board()
 
     while True:
-        boards[selected_board].draw_board()
         display.set_image(img)
         display.show()
 
-        seconds_to_min = 60 - datetime.now(timezone.utc).second
-        sleep(seconds_to_min)
-
 def run_server():
-    app.run(port=3000, debug=True, use_reloader=False, threaded=True)
+    app.run(host="0.0.0.0", port=PORT, debug=DEBUG, use_reloader=False, threaded=True)
 
 if __name__ == "__main__":
     if sys.argv[1] == "--dev":
         from inky.mock import InkyMockImpression
         display = InkyMockImpression((800, 480))
+
+        DEBUG = True
     elif sys.argv[1] == "--release":
         from inky.auto import auto
         display = auto()

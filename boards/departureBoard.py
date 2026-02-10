@@ -1,11 +1,14 @@
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
-from PIL import ImageDraw, ImageFont, Image
+
+from PIL import ImageFont, Image
 from datetime import datetime, timezone, timedelta
-from .colors import *
-from .icons import mode_to_icon
+from libs.colors import *
+from libs.icons import mode_to_icon
 import humanize
 import math
+
+from boards.board import Board
 
 _t = humanize.i18n.activate("nb")
 
@@ -14,48 +17,13 @@ large_fnt = ImageFont.truetype("./static/font/Kodchasan-Regular.ttf", 40)
 small_header_fnt = ImageFont.truetype("./static/font/Kodchasan-Bold.ttf", 20)
 fnt = ImageFont.truetype("./static/font/Kodchasan-Regular.ttf", 20)
 
-
-# ferge og tog = blå
-# metro = rød
-# buss og annet = sort
-# fly = grønn
-# trikk og gondol og Kabelbane = oranjs
-
-wallpaper = Image.open("./static/wallpaper/pi_board_wallpaper.png")
-
 transport = AIOHTTPTransport(url="https://api.entur.io/journey-planner/v3/graphql")
 
-class Board:
-    def __init__(self, query, img, wallpaper_on = False):
-        self.client = Client(transport=transport, fetch_schema_from_transport=True)
-        self.query = gql(query)
-        self.img = img
-        self.d = ImageDraw.Draw(self.img)
-        self.top_bar_height = 75
-        self.wallpaper_on = wallpaper_on
-        
-
-    def draw_board(self):
-        if self.wallpaper_on:
-            self.img.paste(wallpaper)
-        else:
-            self.d.rectangle((0, 0,self.img.width, self.img.height), WHITE)
-
-        # draws overlay
-        self.d.rectangle((0, 0, 800, self.top_bar_height), BLACK)
-        self.d.text((800 - 15, 10), datetime.now().strftime("%H:%M"), font=header_fnt, fill=WHITE, anchor="ra")
-
-        # draw board
-        self._draw_board(self.client.execute(self.query))
-
-
-    def _draw_board(self, data):
-        pass
-
 class DepartureBoard(Board):
-    def __init__(self, img, stop_id, wallpaper_on = False):
-        super().__init__(
-            """
+    def __init__(self, img, stop_id):
+        super().__init__(img)
+        
+        query = """
             {
                 stopPlace(id: "%s") {
                         name
@@ -80,9 +48,11 @@ class DepartureBoard(Board):
                     transportMode
                 }
             }
-            """ % stop_id, 
-            img,
-            wallpaper_on)
+            """ % stop_id
+        
+        self.client = Client(transport=transport, fetch_schema_from_transport=True)
+        self.query = gql(query)
+        self.top_bar_height = 75
     
     def time_to_departure(self, call):
         departure_time = datetime.fromisoformat(call["expectedDepartureTime"])
@@ -97,6 +67,16 @@ class DepartureBoard(Board):
             humanized_time = departure_time.strftime("%H:%M")
 
         return humanized_time
+
+    def draw_board(self):
+        self.d.rectangle((0, 0,self.img.width, self.img.height), WHITE)
+
+        # draws overlay
+        self.d.rectangle((0, 0, 800, self.top_bar_height), BLACK)
+        self.d.text((800 - 15, 10), datetime.now().strftime("%H:%M"), font=header_fnt, fill=WHITE, anchor="ra")
+
+        # draw board
+        self._draw_board(self.client.execute(self.query))
 
 
     def _draw_board(self, data):
