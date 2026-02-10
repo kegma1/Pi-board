@@ -40,10 +40,22 @@ boards = [DepartureBoard(img, "NSR:StopPlace:49662"), # Rådhuset   - buss
 selected_board = 0
 
 
+def get_lan_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = "127.0.0.1"
+    finally:
+        s.close()
+    return ip
+
+
 def main():
     if stop is None:
         hostname = socket.gethostname()
-        ip_addr = socket.gethostbyname(hostname)
+        ip_addr = get_lan_ip()
 
         board = QRBoard(img, ip_addr, hostname, PORT)
         board.draw_board()
