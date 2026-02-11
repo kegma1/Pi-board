@@ -6,7 +6,7 @@ git clone https://github.com/kegma1/Pi-board.git
 ## 2. Set opp venv og installer pakker
 ```sh
 python3.10 -m venv venv
-source env/bin/activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 ```sh
