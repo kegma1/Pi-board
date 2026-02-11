@@ -23,3 +23,51 @@
 h1 {
     font-family: Kodchasan;
 }
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#searchField {
+    width: 50vw;
+}
+
+#stopSearch {
+    width: 100%;
+}
+
+#searchResult {
+    width: 100%;
+    padding: 0;
+}
+
+#searchResult > li {
+    padding: 0;
+    margin: 0px;
+    list-style: none;
+    font-size: small;
+    background-color: #757575;
+}
+
+#searchResult > li:hover {
+    cursor: pointer;
+}
+
+#searchResult > li:nth-child(even) {
+    background-color: #858585;
+}
+
+
+#main_section {
+    display: flex;
+    justify-content: center;
+    padding: 1vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    width: max-content;
+    border-radius: 0px;
+    background-color: var(--color-bg-secondary);
+}

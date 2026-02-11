@@ -1,4 +1,58 @@
 {% extends "base.html" %}
 {% block body %}
-    <h1>Hallo, Verden!</h1>
+    <div id="main_section">
+        <div id="searchField">
+            <input type="search" name="stopSearch" id="stopSearch">
+            <ul id="searchResult">
+
+            </ul>
+        </div>
+
+    </div>
+
+
+    <script>
+        let stopSearch = document.getElementById("stopSearch");
+        let searchResult = document.getElementById("searchResult")
+
+
+        stopSearch.onchange = async () => {
+            let url = `https://api.entur.io/geocoder/v1/autocomplete?text=${stopSearch.value}&size=5&lang=no`;
+            let res = await fetch(url, {
+                method: "GET"
+            })
+            .then(res => res.json())
+            .then(json => json["features"])
+
+            clear_search_result();
+
+            res.forEach(feature => {
+                console.log(feature.properties);
+                add_search_result(feature.properties)
+            });
+        };
+
+        function clear_search_result() {
+            searchResult.innerHTML = ""
+        }
+
+        function add_search_result(search_result) {
+            let li = document.createElement("li");
+            let name = document.createElement("h1");
+            li.append(name);  
+            name.innerText = search_result.label;
+            
+            li.onclick = () => {
+                fetch("/set_stop", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({stop_id: search_result.id})
+                })
+            }
+
+            searchResult.append(li);
+        }
+    </script>
 {% endblock %}
